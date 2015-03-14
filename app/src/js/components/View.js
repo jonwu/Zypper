@@ -1,6 +1,7 @@
 var React = require('react');
 	Header = require('./Header.js');
 	Signin = require('./Signin.js');
+	Rfp = require('./Rfp.js');
 	// Category = require('Category.js');
 	// Question = require('Question.js');
 	// Submission = require('Submission.js');
@@ -8,7 +9,7 @@ var React = require('react');
 var View = React.createClass({
 	getInitialState: function() {
 		return {
-			isSignIn: false
+			isSignIn: true
 		};
 	},
 
@@ -18,6 +19,7 @@ var View = React.createClass({
 			if (!this.state.isSignIn){
 				return <Signin />
 			}
+			return <Rfp />
 			
 		}.bind(this)();
 

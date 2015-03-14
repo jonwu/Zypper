@@ -1,10 +1,14 @@
 var React = require('react');
+	Category = require('./Category');
 
 var Rfp = React.createClass({
 
 	render: function() {
 		return (
-			<div />
+
+			<div class="container">
+				<Category />
+			</div>
 		);
 	}
 

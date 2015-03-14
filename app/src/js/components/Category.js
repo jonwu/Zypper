@@ -1,9 +1,11 @@
 var React = require('react');
 var Category = React.createClass({
-	
+
 	render: function() {
 		return (
-			<div />
+			<div class="col-md-1">
+				
+			</div>
 		);
 	}
 
