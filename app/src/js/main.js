@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 	View = require('./components/View.js')
 

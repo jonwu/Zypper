@@ -5,23 +5,9 @@ var Signin = React.createClass({
 	login: function(){
 		var email = React.findDOMNode(this.refs.email).value
 		var password = React.findDOMNode(this.refs.password).value
-		alert(password)
-		$.ajax({
-			url: 'http://localhost:3000/api/sessions',
-			type: 'POST',
-			dataType: 'json',
-			data: {"email": email, "password": password},
-		})
-		.done(function(data) {
-			alert(1)
-		})
-		.fail(function() {
-			alert(2)
-		})
-		.always(function() {
-			console.log("complete");
+		$.post('http://localhost:3000/api/sessions', {"email": email, "password": password}, function(data, textStatus, xhr) {
+			console.log(data)
 		});
-		
 	},
 	render: function() {
 		return (

@@ -86,23 +86,9 @@ var Signin = React.createClass({displayName: "Signin",
 	login: function(){
 		var email = React.findDOMNode(this.refs.email).value
 		var password = React.findDOMNode(this.refs.password).value
-		alert(password)
-		$.ajax({
-			url: 'http://localhost:3000/api/sessions',
-			type: 'POST',
-			dataType: 'json',
-			data: {"email": email, "password": password},
-		})
-		.done(function(data) {
-			alert(1)
-		})
-		.fail(function() {
-			alert(2)
-		})
-		.always(function() {
-			console.log("complete");
+		$.post('http://localhost:3000/api/sessions', {"email": email, "password": password}, function(data, textStatus, xhr) {
+			console.log(data)
 		});
-		
 	},
 	render: function() {
 		return (
@@ -151,7 +137,7 @@ var View = React.createClass({displayName: "View",
 			}
 			
 		}.bind(this)();
-		
+
 		return (
 			
 			React.createElement("div", {id: "container"}, 
@@ -171,9 +157,9 @@ module.exports = View;
 
 
 
-},{"./Header.js":1,"./Signin.js":3,"react":161}],5:[function(require,module,exports){
-/** @jsx React.DOM */
 
+
+},{"./Header.js":1,"./Signin.js":3,"react":161}],5:[function(require,module,exports){
 var React = require('react');
 	View = require('./components/View.js')
 
