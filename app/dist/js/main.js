@@ -84,11 +84,11 @@ var React = require('react');
 var Signin = React.createClass({displayName: "Signin",
 	
 	login: function(){
-		var email = this.refs.email.getDOMNode().value
-		var password = this.refs.password.getDOMNode().value
+		var email = React.findDOMNode(this.refs.email).value
+		var password = React.findDOMNode(this.refs.password).value
 		alert(password)
 		$.ajax({
-			url: 'localhost:3000/api/sessions',
+			url: 'http://localhost:3000/api/sessions',
 			type: 'POST',
 			dataType: 'json',
 			data: {"email": email, "password": password},
@@ -97,7 +97,7 @@ var Signin = React.createClass({displayName: "Signin",
 			alert(1)
 		})
 		.fail(function() {
-			console.log("error");
+			alert(2)
 		})
 		.always(function() {
 			console.log("complete");
@@ -107,7 +107,7 @@ var Signin = React.createClass({displayName: "Signin",
 	render: function() {
 		return (
 			React.createElement("div", {class: "row"}, 
-				React.createElement("form", {className: "form-signin col-md-offset-4 col-md-4 col-xs-8 col-xs-offset-2"}, 
+				React.createElement("div", {className: "form-signin col-md-offset-4 col-md-4 col-xs-8 col-xs-offset-2"}, 
 					React.createElement("h2", {className: "form-signin-heading"}, "Please sign in"), 
 					React.createElement("label", {for: "inputEmail", className: "sr-only"}, "Email address"), 
 					React.createElement("input", {type: "email", id: "inputEmail", className: "form-control", placeholder: "Email address", required: true, autofocus: true, ref: "email"}, " "), 
