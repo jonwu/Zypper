@@ -7,3 +7,4 @@ React.render(
 	<View />,
 	document.getElementById('app')
 );
+

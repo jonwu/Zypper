@@ -4,10 +4,7 @@ var Rfp = React.createClass({
 
 	render: function() {
 		return (
-			<div id="container">
-				
-				
-			</div>
+			<div />
 		);
 	}
 

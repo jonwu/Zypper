@@ -4,10 +4,12 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     concat = require('gulp-concat'),
     port = process.env.port || 3031;
+    plumber = require('gulp-plumber')
 
 // browserify and transform JSX
 gulp.task('browserify', function() {
     gulp.src('./app/src/js/main.js')
+      .pipe(plumber())
       .pipe(browserify({transform: 'reactify'}))
       .pipe(gulp.dest('./app/dist/js'));
 });
