@@ -27,7 +27,9 @@ var View = React.createClass({
 			
 			<div id="container">
 				<Header />
+				<div className="row">
 				{page}
+				</div>
 			</div>	
 
 

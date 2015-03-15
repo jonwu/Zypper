@@ -3,9 +3,11 @@ var Category = React.createClass({
 
 	render: function() {
 		return (
-			<div class="col-md-1">
+			
+			<div className="col-md-1" id="category">
 				
 			</div>
+			
 		);
 	}
 

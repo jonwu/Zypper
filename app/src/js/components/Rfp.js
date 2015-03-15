@@ -1,5 +1,6 @@
 var React = require('react');
 	Category = require('./Category');
+	Question = require('./Question');
 
 var Rfp = React.createClass({
 
@@ -8,6 +9,7 @@ var Rfp = React.createClass({
 
 			<div class="container">
 				<Category />
+				<Question />
 			</div>
 		);
 	}

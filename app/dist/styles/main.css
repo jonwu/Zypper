@@ -1,0 +1,13 @@
+.navbar {
+  margin: 0; }
+
+#category {
+  position: fixed;
+  height: 100%;
+  background-color: #2C3E50; }
+
+#question {
+  position: fixed;
+  height: 100%;
+  background-color: white;
+  border-right: 1px solid #D2D7D3; }

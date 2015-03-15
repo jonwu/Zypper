@@ -1,0 +1,8 @@
+@import 'colors';
+
+#question{
+	position: fixed;
+	height: 100%;
+	background-color: white;
+	border-right: 1px solid $light_border;
+}

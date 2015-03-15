@@ -4,7 +4,9 @@ var Question = React.createClass({
 
 	render: function() {
 		return (
-			<div />
+			<div className="col-md-3 col-md-offset-1" id="question">
+				
+			</div>
 		);
 	}
 
