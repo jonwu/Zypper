@@ -5,13 +5,6 @@ var Header = React.createClass({
 	
 	render: function() {
 
-		var loadRfpNav = function(){
-
-			if (this.props.token != null){
-				return <RfpNav api={this.props.api} token={this.props.token}/>
-			}
-		}.bind(this)();
-
 		return (
 			<nav className="navbar navbar-default">
 			  <div className="container-fluid">
@@ -23,7 +16,7 @@ var Header = React.createClass({
 				    
 				    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				      <ul className="nav navbar-nav">
-				          {loadRfpNav}
+				          <RfpNav api={this.props.api} token={this.props.token} setCurrentRfp = {this.props.setCurrentRfp}/>
 				      </ul>
 				      
 				      <ul className="nav navbar-nav navbar-right">

@@ -25,13 +25,6 @@ var Header = React.createClass({displayName: "Header",
 	
 	render: function() {
 
-		var loadRfpNav = function(){
-
-			if (this.props.token != null){
-				return React.createElement(RfpNav, {api: this.props.api, token: this.props.token})
-			}
-		}.bind(this)();
-
 		return (
 			React.createElement("nav", {className: "navbar navbar-default"}, 
 			  React.createElement("div", {className: "container-fluid"}, 
@@ -43,7 +36,7 @@ var Header = React.createClass({displayName: "Header",
 				    
 				    React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
 				      React.createElement("ul", {className: "nav navbar-nav"}, 
-				          loadRfpNav
+				          React.createElement(RfpNav, {api: this.props.api, token: this.props.token, setCurrentRfp: this.props.setCurrentRfp})
 				      ), 
 				      
 				      React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
@@ -91,15 +84,27 @@ module.exports = Question;
 var React = require('react');
 	Category = require('./Category');
 	Question = require('./Question');
+	Header = require('./Header');
 
 var Rfp = React.createClass({displayName: "Rfp",
-
+	getInitialState: function() {
+		return {
+			rfp: null
+		};
+	},
+	setCurrentRfp: function(rfp){
+		this.setState({
+			rfp: rfp
+		});
+	},
 	render: function() {
 		return (
-			
 			React.createElement("div", null, 
-				React.createElement(Category, {api: this.props.api, token: this.props.token}), 
-				React.createElement(Question, {api: this.props.api, token: this.props.token})
+				React.createElement(Header, {api: this.props.api, token: this.props.token, setCurrentRfp: this.setCurrentRfp}), 
+				React.createElement("div", {className: "row"}, 
+					React.createElement(Category, {api: this.props.api, token: this.props.token}), 
+					React.createElement(Question, {api: this.props.api, token: this.props.token})
+				)
 			)
 		);
 	}
@@ -108,7 +113,7 @@ var Rfp = React.createClass({displayName: "Rfp",
 
 module.exports = Rfp;
 
-},{"./Category":1,"./Question":3,"react":164}],5:[function(require,module,exports){
+},{"./Category":1,"./Header":2,"./Question":3,"react":164}],5:[function(require,module,exports){
 var React = require('react');
 
 var RfpNav = React.createClass({displayName: "RfpNav",
@@ -231,11 +236,8 @@ var View = React.createClass({displayName: "View",
 				return React.createElement(Signin, {api: this.state.api, onToken: this.saveToken})
 			}
 			return (React.createElement("div", null, 
-				React.createElement(Header, {api: this.state.api, token: this.state.token}), 
-				React.createElement("div", {className: "row"}, 
-					React.createElement(Rfp, {api: this.state.api, token: this.state.token})
-				)
-				))
+				React.createElement(Rfp, {api: this.state.api, token: this.state.token})
+			))
 		}.bind(this)();
 
 		return (

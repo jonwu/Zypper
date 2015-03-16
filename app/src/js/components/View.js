@@ -30,11 +30,8 @@ var View = React.createClass({
 				return <Signin api={this.state.api} onToken={this.saveToken} />
 			}
 			return (<div>
-				<Header api={this.state.api} token={this.state.token}/> 
-				<div className="row">
-					<Rfp api={this.state.api} token={this.state.token}/>
-				</div>
-				</div>)
+				<Rfp api={this.state.api} token={this.state.token}/>
+			</div>)
 		}.bind(this)();
 
 		return (
