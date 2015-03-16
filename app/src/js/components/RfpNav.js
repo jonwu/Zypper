@@ -3,21 +3,43 @@ var React = require('react');
 var RfpNav = React.createClass({
 
 	componentDidMount: function() {
-		
+		console.log(this.props.api)
+		$.get(this.props.api+'/rfis', {'token': this.props.token}, function(data) {
+			this.setState({
+				rfis: data
+			});
+		}.bind(this));
+	},
+
+	getInitialState: function() {
+		return {
+			rfis: [], 
+			title: null
+		};
+	},
+
+	selectRfp: function(e){
+
+		var title = React.findDOMNode(this.refs.title).text
+		console.log(title)
+		this.setState({
+			title: title
+		});
 	},
 
 	render: function() {
+		var rfis = this.state.rfis.map(function(rfi){
+			return (
+				<li><a ref="title" onClick={this.selectRfp}>{rfi['title']}</a></li>
+  			);	
+		}.bind(this));  
+
+		var title = this.state.title ? this.state.title : 'No RFI Selected';
 		return (
-			<li className="dropdown">
-			  <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span className="caret"></span></a>
+			<li className="dropdown col-md-12">
+			  <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{title}<span className="caret"></span></a>
 	          <ul className="dropdown-menu" role="menu">
-	            <li><a href="#">Action</a></li>
-	            <li><a href="#">Another action</a></li>
-	            <li><a href="#">Something else here</a></li>
-	            <li className="divider"></li>
-	            <li><a href="#">Separated link</a></li>
-	            <li className="divider"></li>
-	            <li><a href="#">One more separated link</a></li>
+	            {rfis} 
 	          </ul>
             </li>
 		);

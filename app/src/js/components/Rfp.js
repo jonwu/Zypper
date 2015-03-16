@@ -6,10 +6,10 @@ var Rfp = React.createClass({
 
 	render: function() {
 		return (
-
-			<div class="container">
-				<Category />
-				<Question />
+			
+			<div >
+				<Category api={this.props.api} token={this.props.token} />
+				<Question api={this.props.api} token={this.props.token}/>
 			</div>
 		);
 	}

@@ -22,12 +22,20 @@ var React = require('react');
 	RfpNav = require('./RfpNav.js');
 
 var Header = React.createClass({displayName: "Header",
-
+	
 	render: function() {
+
+		var loadRfpNav = function(){
+
+			if (this.props.token != null){
+				return React.createElement(RfpNav, {api: this.props.api, token: this.props.token})
+			}
+		}.bind(this)();
+
 		return (
 			React.createElement("nav", {className: "navbar navbar-default"}, 
 			  React.createElement("div", {className: "container-fluid"}, 
-			  	React.createElement("div", {class: "row"}, 
+			  	
 				    React.createElement("div", {className: "navbar-header col-md-1"}, 
 				      React.createElement("a", {className: "navbar-brand", href: "#"}, "Brand")
 				    ), 
@@ -35,14 +43,9 @@ var Header = React.createClass({displayName: "Header",
 				    
 				    React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
 				      React.createElement("ul", {className: "nav navbar-nav"}, 
-				          React.createElement(RfpNav, null)
+				          loadRfpNav
 				      ), 
-				      React.createElement("form", {className: "navbar-form navbar-left", role: "search"}, 
-				        React.createElement("div", {className: "form-group"}
-				          
-				        )
-				        
-				      ), 
+				      
 				      React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
 				        
 				        React.createElement("li", {className: "dropdown"}, 
@@ -51,12 +54,12 @@ var Header = React.createClass({displayName: "Header",
 				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Action")), 
 				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Another action")), 
 				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Something else here")), 
-				            React.createElement("li", {className: "divider"}), 
+				            
 				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Separated link"))
 				          )
 				        )
 				      )
-				    )
+				    
 			    )
 			  )
 			)
@@ -93,10 +96,10 @@ var Rfp = React.createClass({displayName: "Rfp",
 
 	render: function() {
 		return (
-
-			React.createElement("div", {class: "container"}, 
-				React.createElement(Category, null), 
-				React.createElement(Question, null)
+			
+			React.createElement("div", null, 
+				React.createElement(Category, {api: this.props.api, token: this.props.token}), 
+				React.createElement(Question, {api: this.props.api, token: this.props.token})
 			)
 		);
 	}
@@ -111,21 +114,43 @@ var React = require('react');
 var RfpNav = React.createClass({displayName: "RfpNav",
 
 	componentDidMount: function() {
-		
+		console.log(this.props.api)
+		$.get(this.props.api+'/rfis', {'token': this.props.token}, function(data) {
+			this.setState({
+				rfis: data
+			});
+		}.bind(this));
+	},
+
+	getInitialState: function() {
+		return {
+			rfis: [], 
+			title: null
+		};
+	},
+
+	selectRfp: function(e){
+
+		var title = React.findDOMNode(this.refs.title).text
+		console.log(title)
+		this.setState({
+			title: title
+		});
 	},
 
 	render: function() {
+		var rfis = this.state.rfis.map(function(rfi){
+			return (
+				React.createElement("li", null, React.createElement("a", {ref: "title", onClick: this.selectRfp}, rfi['title']))
+  			);	
+		}.bind(this));  
+
+		var title = this.state.title ? this.state.title : 'No RFI Selected';
 		return (
-			React.createElement("li", {className: "dropdown"}, 
-			  React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-expanded": "false"}, "Dropdown ", React.createElement("span", {className: "caret"})), 
+			React.createElement("li", {className: "dropdown col-md-12"}, 
+			  React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-expanded": "false"}, title, React.createElement("span", {className: "caret"})), 
 	          React.createElement("ul", {className: "dropdown-menu", role: "menu"}, 
-	            React.createElement("li", null, React.createElement("a", {href: "#"}, "Action")), 
-	            React.createElement("li", null, React.createElement("a", {href: "#"}, "Another action")), 
-	            React.createElement("li", null, React.createElement("a", {href: "#"}, "Something else here")), 
-	            React.createElement("li", {className: "divider"}), 
-	            React.createElement("li", null, React.createElement("a", {href: "#"}, "Separated link")), 
-	            React.createElement("li", {className: "divider"}), 
-	            React.createElement("li", null, React.createElement("a", {href: "#"}, "One more separated link"))
+	            rfis
 	          )
             )
 		);
@@ -142,13 +167,16 @@ var Signin = React.createClass({displayName: "Signin",
 	login: function(){
 		var email = React.findDOMNode(this.refs.email).value
 		var password = React.findDOMNode(this.refs.password).value
-		$.post('http://localhost:3000/api/sessions', {"email": email, "password": password}, function(data, textStatus, xhr) {
-			console.log(data)
-		});
+
+		$.post(this.props.api + '/sessions', {"email": email, "password": password}, function(data, textStatus, xhr) {
+			var user = data['user']
+			var token = user["auth_token"]
+			this.props.onToken(token)
+		}.bind(this));
 	},
 	render: function() {
 		return (
-			React.createElement("div", {class: "row"}, 
+			React.createElement("div", {className: "row"}, 
 				React.createElement("div", {className: "form-signin col-md-offset-4 col-md-4 col-xs-8 col-xs-offset-2"}, 
 					React.createElement("h2", {className: "form-signin-heading"}, "Please sign in"), 
 					React.createElement("label", {for: "inputEmail", className: "sr-only"}, "Email address"), 
@@ -180,34 +208,44 @@ var React = require('react');
 	// Submission = require('Submission.js');
 
 var View = React.createClass({displayName: "View",
+
+	saveToken: function(token){
+		console.log(token)
+		this.setState({
+			token: token
+		});
+	},
+
 	getInitialState: function() {
 		return {
-			isSignIn: true
+			token: "-UzwTmPpStSJdeKrToC8dLMCApaHvPqxzw",
+			api: "http://localhost:3000/api"
 		};
 	},
 
 	render: function() {
 		
 		var page = function(){
-			if (!this.state.isSignIn){
-				return React.createElement(Signin, null)
+
+			if (this.state.token == null){
+				return React.createElement(Signin, {api: this.state.api, onToken: this.saveToken})
 			}
-			return React.createElement(Rfp, null)
-			
+			return (React.createElement("div", null, 
+				React.createElement(Header, {api: this.state.api, token: this.state.token}), 
+				React.createElement("div", {className: "row"}, 
+					React.createElement(Rfp, {api: this.state.api, token: this.state.token})
+				)
+				))
 		}.bind(this)();
 
 		return (
 			
 			React.createElement("div", {id: "container"}, 
-				React.createElement(Header, null), 
-				React.createElement("div", {className: "row"}, 
+				
+				
 				page
-				)
+				
 			)	
-
-
-
-
 		);
 	}
 

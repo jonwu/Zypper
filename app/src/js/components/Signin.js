@@ -5,13 +5,16 @@ var Signin = React.createClass({
 	login: function(){
 		var email = React.findDOMNode(this.refs.email).value
 		var password = React.findDOMNode(this.refs.password).value
-		$.post('http://localhost:3000/api/sessions', {"email": email, "password": password}, function(data, textStatus, xhr) {
-			console.log(data)
-		});
+
+		$.post(this.props.api + '/sessions', {"email": email, "password": password}, function(data, textStatus, xhr) {
+			var user = data['user']
+			var token = user["auth_token"]
+			this.props.onToken(token)
+		}.bind(this));
 	},
 	render: function() {
 		return (
-			<div class="row">
+			<div className="row">
 				<div className="form-signin col-md-offset-4 col-md-4 col-xs-8 col-xs-offset-2">
 					<h2 className="form-signin-heading">Please sign in</h2>
 					<label for="inputEmail" className="sr-only">Email address</label>

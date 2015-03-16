@@ -7,34 +7,44 @@ var React = require('react');
 	// Submission = require('Submission.js');
 
 var View = React.createClass({
+
+	saveToken: function(token){
+		console.log(token)
+		this.setState({
+			token: token
+		});
+	},
+
 	getInitialState: function() {
 		return {
-			isSignIn: true
+			token: "-UzwTmPpStSJdeKrToC8dLMCApaHvPqxzw",
+			api: "http://localhost:3000/api"
 		};
 	},
 
 	render: function() {
 		
 		var page = function(){
-			if (!this.state.isSignIn){
-				return <Signin />
+
+			if (this.state.token == null){
+				return <Signin api={this.state.api} onToken={this.saveToken} />
 			}
-			return <Rfp />
-			
+			return (<div>
+				<Header api={this.state.api} token={this.state.token}/> 
+				<div className="row">
+					<Rfp api={this.state.api} token={this.state.token}/>
+				</div>
+				</div>)
 		}.bind(this)();
 
 		return (
 			
 			<div id="container">
-				<Header />
-				<div className="row">
+				
+				
 				{page}
-				</div>
+				
 			</div>	
-
-
-
-
 		);
 	}
 
