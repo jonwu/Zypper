@@ -1,6 +1,6 @@
 var React = require('react');
 
-var RfpNav = React.createClass({
+var RfpList = React.createClass({
 
 	componentDidMount: function() {
 		console.log(this.props.api)
@@ -18,19 +18,21 @@ var RfpNav = React.createClass({
 		};
 	},
 
-	selectRfp: function(e){
+	selectRfp: function(i){
+		var rfp = this.state.rfis[i]
+		this.props.setCurrentRfp(rfp)
 
-		var title = React.findDOMNode(this.refs.title).text
-		console.log(title)
 		this.setState({
-			title: title
+			title: rfp.title
 		});
 	},
 
 	render: function() {
-		var rfis = this.state.rfis.map(function(rfi){
+		var rfis = this.state.rfis.map(function(rfi, i){
 			return (
-				<li><a ref="title" onClick={this.selectRfp}>{rfi['title']}</a></li>
+				<li key={rfi.id}>
+					<a onClick={this.selectRfp.bind(this, i)}>{rfi.title}</a>
+				</li>
   			);	
 		}.bind(this));  
 
@@ -46,4 +48,4 @@ var RfpNav = React.createClass({
 	}
 
 });
-module.exports = RfpNav;
+module.exports = RfpList;

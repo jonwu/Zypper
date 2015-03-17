@@ -12,6 +12,7 @@ var Signin = React.createClass({
 			this.props.onToken(token)
 		}.bind(this));
 	},
+	
 	render: function() {
 		return (
 			<div className="row">

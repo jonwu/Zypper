@@ -17,15 +17,13 @@ var View = React.createClass({
 
 	getInitialState: function() {
 		return {
-			token: "-UzwTmPpStSJdeKrToC8dLMCApaHvPqxzw",
+			token: "37LK8XDW2WhmT8-x-3br7ZxueVcJmx-xPA",
 			api: "http://localhost:3000/api"
 		};
 	},
 
 	render: function() {
-		
 		var page = function(){
-
 			if (this.state.token == null){
 				return <Signin api={this.state.api} onToken={this.saveToken} />
 			}
@@ -35,12 +33,8 @@ var View = React.createClass({
 		}.bind(this)();
 
 		return (
-			
 			<div id="container">
-				
-				
 				{page}
-				
 			</div>	
 		);
 	}

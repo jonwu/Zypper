@@ -1,14 +1,27 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var React = require('react');
 var Category = React.createClass({displayName: "Category",
+	
+	setCategory: function(i){
+		var category = this.props.categories[i]
+		this.props.setCurrentCategory(category)
+	},
 
 	render: function() {
+
+		var categories = this.props.categories.map(function(category, i){
+			return (
+				React.createElement("li", {key: category.id}, 
+					React.createElement("a", {onClick: this.setCategory.bind(this, i)}, category.text)
+				)
+			);
+		}.bind(this));
+
 		return (
-			
-			React.createElement("div", {className: "col-md-1", id: "category"}
-				
+			React.createElement("div", {className: "col-md-1", id: "category"}, 
+				categories
 			)
-			
+
 		);
 	}
 
@@ -19,7 +32,7 @@ module.exports = Category;
 
 },{"react":164}],2:[function(require,module,exports){
 var React = require('react');
-	RfpNav = require('./RfpNav.js');
+	RfpList = require('./RfpList.js');
 
 var Header = React.createClass({displayName: "Header",
 	
@@ -28,7 +41,6 @@ var Header = React.createClass({displayName: "Header",
 		return (
 			React.createElement("nav", {className: "navbar navbar-default"}, 
 			  React.createElement("div", {className: "container-fluid"}, 
-			  	
 				    React.createElement("div", {className: "navbar-header col-md-1"}, 
 				      React.createElement("a", {className: "navbar-brand", href: "#"}, "Brand")
 				    ), 
@@ -36,24 +48,9 @@ var Header = React.createClass({displayName: "Header",
 				    
 				    React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
 				      React.createElement("ul", {className: "nav navbar-nav"}, 
-				          React.createElement(RfpNav, {api: this.props.api, token: this.props.token, setCurrentRfp: this.props.setCurrentRfp})
-				      ), 
-				      
-				      React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-				        
-				        React.createElement("li", {className: "dropdown"}, 
-				          React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-expanded": "false"}, "Dropdown ", React.createElement("span", {className: "caret"})), 
-				          React.createElement("ul", {className: "dropdown-menu", role: "menu"}, 
-				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Action")), 
-				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Another action")), 
-				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Something else here")), 
-				            
-				            React.createElement("li", null, React.createElement("a", {href: "#"}, "Separated link"))
-				          )
-				        )
+				          React.createElement(RfpList, {api: this.props.api, token: this.props.token, setCurrentRfp: this.props.setCurrentRfp})
 				      )
-				    
-			    )
+			    	)
 			  )
 			)
 		);
@@ -63,15 +60,24 @@ var Header = React.createClass({displayName: "Header",
 
 module.exports = Header;
 
-},{"./RfpNav.js":5,"react":164}],3:[function(require,module,exports){
+},{"./RfpList.js":5,"react":164}],3:[function(require,module,exports){
 var React = require('react');
 
 var Question = React.createClass({displayName: "Question",
 
+	
 	render: function() {
+		var questions = this.props.questions.map(function(question, i){
+			return (
+				React.createElement("li", {className: "list-group-item ", key: question.id}, 
+					React.createElement("a", null, question.text)
+				)
+			);
+		}.bind(this));
+
 		return (
-			React.createElement("div", {className: "col-md-3 col-md-offset-1", id: "question"}
-				
+			React.createElement("div", {className: "col-md-3 col-md-offset-1", id: "question"}, 
+				questions
 			)
 		);
 	}
@@ -89,21 +95,51 @@ var React = require('react');
 var Rfp = React.createClass({displayName: "Rfp",
 	getInitialState: function() {
 		return {
-			rfp: null
+			rfp: null,
+			categories: [],
+			questions: []
 		};
 	},
+
+	
+	
 	setCurrentRfp: function(rfp){
-		this.setState({
-			rfp: rfp
-		});
+		if(rfp != null){
+			$.get(this.props.api + '/rfis/'+ rfp.id +'/categories', {'token': this.props.token}, function(data) {
+				console.log("categories", data)
+				this.setState({
+					rfp: rfp,
+					categories: data
+				});
+			}.bind(this));
+		}	
 	},
+
+	setCurrentCategory: function(category){
+		if(category != null){
+			$.get(this.props.api + '/categories/'+ category.id +'/questions', {'token': this.props.token}, function(data) {
+				console.log("questions", data)
+				this.setState({
+					questions: data
+				});
+			}.bind(this));
+		}
+	},
+	
+
+	
 	render: function() {
 		return (
 			React.createElement("div", null, 
 				React.createElement(Header, {api: this.props.api, token: this.props.token, setCurrentRfp: this.setCurrentRfp}), 
 				React.createElement("div", {className: "row"}, 
-					React.createElement(Category, {api: this.props.api, token: this.props.token}), 
-					React.createElement(Question, {api: this.props.api, token: this.props.token})
+					React.createElement(Category, {
+						api: this.props.api, 
+						token: this.props.token, 
+						categories: this.state.categories, 
+						setCurrentCategory: this.setCurrentCategory}), 
+
+					React.createElement(Question, {api: this.props.api, token: this.props.token, questions: this.state.questions})
 				)
 			)
 		);
@@ -116,7 +152,7 @@ module.exports = Rfp;
 },{"./Category":1,"./Header":2,"./Question":3,"react":164}],5:[function(require,module,exports){
 var React = require('react');
 
-var RfpNav = React.createClass({displayName: "RfpNav",
+var RfpList = React.createClass({displayName: "RfpList",
 
 	componentDidMount: function() {
 		console.log(this.props.api)
@@ -134,19 +170,21 @@ var RfpNav = React.createClass({displayName: "RfpNav",
 		};
 	},
 
-	selectRfp: function(e){
+	selectRfp: function(i){
+		var rfp = this.state.rfis[i]
+		this.props.setCurrentRfp(rfp)
 
-		var title = React.findDOMNode(this.refs.title).text
-		console.log(title)
 		this.setState({
-			title: title
+			title: rfp.title
 		});
 	},
 
 	render: function() {
-		var rfis = this.state.rfis.map(function(rfi){
+		var rfis = this.state.rfis.map(function(rfi, i){
 			return (
-				React.createElement("li", null, React.createElement("a", {ref: "title", onClick: this.selectRfp}, rfi['title']))
+				React.createElement("li", {key: rfi.id}, 
+					React.createElement("a", {onClick: this.selectRfp.bind(this, i)}, rfi.title)
+				)
   			);	
 		}.bind(this));  
 
@@ -162,7 +200,7 @@ var RfpNav = React.createClass({displayName: "RfpNav",
 	}
 
 });
-module.exports = RfpNav;
+module.exports = RfpList;
 
 },{"react":164}],6:[function(require,module,exports){
 var React = require('react');
@@ -179,6 +217,7 @@ var Signin = React.createClass({displayName: "Signin",
 			this.props.onToken(token)
 		}.bind(this));
 	},
+	
 	render: function() {
 		return (
 			React.createElement("div", {className: "row"}, 
@@ -223,15 +262,13 @@ var View = React.createClass({displayName: "View",
 
 	getInitialState: function() {
 		return {
-			token: "-UzwTmPpStSJdeKrToC8dLMCApaHvPqxzw",
+			token: "37LK8XDW2WhmT8-x-3br7ZxueVcJmx-xPA",
 			api: "http://localhost:3000/api"
 		};
 	},
 
 	render: function() {
-		
 		var page = function(){
-
 			if (this.state.token == null){
 				return React.createElement(Signin, {api: this.state.api, onToken: this.saveToken})
 			}
@@ -241,12 +278,8 @@ var View = React.createClass({displayName: "View",
 		}.bind(this)();
 
 		return (
-			
 			React.createElement("div", {id: "container"}, 
-				
-				
 				page
-				
 			)	
 		);
 	}
