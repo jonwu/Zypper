@@ -6,8 +6,53 @@
   height: 100%;
   background-color: #2C3E50; }
 
+#category ul {
+  list-style-type: none;
+  padding: 0; }
+#category ul li {
+  padding-top: 10px;
+  text-align: center; }
+#category ul li a, #category ul li h1 {
+  color: #95A5A6;
+  text-decoration: none;
+  -o-transition: .7s;
+  -ms-transition: .7s;
+  -moz-transition: .7s;
+  -webkit-transition: .7s;
+  /* ...and now for the proper property */
+  transition: .7s; }
+#category ul li:hover a, #category ul li:hover h1 {
+  color: white;
+  text-decoration: none; }
+
 #question {
   position: fixed;
   height: 100%;
   background-color: white;
-  border-right: 1px solid #D2D7D3; }
+  border-right: 1px solid #D2D7D3;
+  padding: 0;
+  overflow: auto; }
+
+#question .list-group {
+  margin: 0;
+  border-radius: 0; }
+#question .list-group .list-group-item {
+  border-radius: 0;
+  border-right: 0;
+  border-left: 0;
+  font-size: 11.5px;
+  background-color: white;
+  border-color: #D2D7D3; }
+#question .list-group .list-group-item textarea {
+  width: 100%;
+  height: 100%;
+  border: 0px;
+  resize: none; }
+#question .list-group .list-group-item a {
+  color: #2C3E50; }
+#question .list-group .list-group-item:first-child {
+  border-top: 0; }
+#question .list-group .list-group-item:hover {
+  text-decoration: none;
+  color: #2C3E50;
+  background-color: #ECF2F8; }

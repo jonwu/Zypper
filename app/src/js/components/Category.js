@@ -10,15 +10,18 @@ var Category = React.createClass({
 
 		var categories = this.props.categories.map(function(category, i){
 			return (
-				<li key={category.id}>
-					<a onClick={this.setCategory.bind(this, i)}>{category.text}</a>
+				<li key={category.id} onClick={this.setCategory.bind(this, i)}>
+					<h1>{category.text[0]}</h1>
+					<a>{category.text}</a>
 				</li>
 			);
 		}.bind(this));
 
 		return (
-			<div className="col-md-1" id="category">
-				{categories}
+			<div className="col-md-1 col-xs-2" id="category">
+				<ul>
+					{categories}
+				</ul>
 			</div>
 
 		);

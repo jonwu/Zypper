@@ -5,3 +5,30 @@
 	height: 100%;
 	background-color: $dark;
 }
+
+#category{
+	ul{
+		list-style-type: none;
+		padding: 0;
+	}
+
+	ul li{
+		padding-top: 10px;
+		text-align: center;
+	}
+	ul li a, ul li h1{
+		color: $secondary;
+		text-decoration: none;
+		-o-transition:.7s;
+		-ms-transition:.7s;
+		-moz-transition:.7s;
+		-webkit-transition:.7s;
+		/* ...and now for the proper property */
+		transition:.7s;
+	}
+	
+	ul li:hover a, ul li:hover h1{
+		color: white;
+		text-decoration: none;
+	}
+}

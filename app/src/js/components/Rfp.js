@@ -37,13 +37,12 @@ var Rfp = React.createClass({
 		}
 	},
 	
-
 	
 	render: function() {
 		return (
 			<div>
 				<Header api={this.props.api} token={this.props.token} setCurrentRfp = {this.setCurrentRfp}/> 
-				<div className="row">
+				<div>
 					<Category 
 						api={this.props.api} 
 						token={this.props.token} 

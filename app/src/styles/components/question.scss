@@ -5,4 +5,43 @@
 	height: 100%;
 	background-color: white;
 	border-right: 1px solid $light_border;
+	padding: 0;
+	overflow: auto;
+}
+
+#question{
+	.list-group{
+		margin: 0;
+    	border-radius: 0;
+	}	
+	.list-group .list-group-item{
+	    border-radius: 0;
+	    border-right: 0;
+	    border-left: 0;
+	    
+	    font-size: 11.5px;
+	    background-color: white;
+	    border-color: $light_border;
+	}
+	.list-group .list-group-item textarea{
+		width: 100%;
+		height: 100%;
+		border: 0px;
+		resize: none;
+	}
+	.list-group .list-group-item a{
+		color: $primary;
+
+	}
+	.list-group .list-group-item:first-child{
+    	border-top: 0;
+
+	}
+
+	.list-group .list-group-item:hover{
+	    text-decoration: none;
+	    color: $primary;
+	    background-color: $minor;
+	}
+	
 }
