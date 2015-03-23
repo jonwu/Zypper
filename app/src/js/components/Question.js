@@ -12,6 +12,11 @@ var Question = React.createClass({
 		}
 		
 	},
+	handleFocus: function(i){
+		var question = this.props.questions[i]
+		this.props.setCurrentQuestion(question)
+
+	},
 
 	render: function() {
 		console.log(this.props.questions)
@@ -19,7 +24,7 @@ var Question = React.createClass({
 			return (
 				<li className = "list-group-item" key={i}>
 					<span className = "drag glyphicon glyphicon-th" aria-hidden="true"></span>
-					<Textarea onKeyUp={this.handleKeyUp}>{question.text}</Textarea>
+					<Textarea onFocus={this.handleFocus.bind(this, i)} onKeyUp={this.handleKeyUp}>{question.text}</Textarea>
 				</li>
 			);
 		}.bind(this));

@@ -2,7 +2,7 @@
 
 #question{
 	position: absolute;
-	height: 100%;
+	height: calc(100% - 50px);
 	background-color: white;
 	border-right: 1px solid $light_border;
 	padding: 0;

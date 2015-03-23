@@ -2,12 +2,15 @@ var React = require('react');
 	Category = require('./Category');
 	Question = require('./Question');
 	Header = require('./Header');
+	Participant = require('./Participant');
+	Edit = require('./Edit');
 
 var Rfp = React.createClass({
 	getInitialState: function() {
 		return {
 			rfp: null,
 			category: null,
+			question: null,
 			categories: [],
 			questions: []
 		};
@@ -38,7 +41,13 @@ var Rfp = React.createClass({
 			}.bind(this));
 		}
 	},
-	
+	setCurrentQuestion: function(question){
+		if(question != null){
+			this.setState({
+				question: question
+			});
+		}
+	},
 	handleNewQuestion: function(questions){
 		this.setState({
 			questions: questions
@@ -48,7 +57,9 @@ var Rfp = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<Header api={this.props.api} token={this.props.token} setCurrentRfp = {this.setCurrentRfp}/> 
+				<Header api={this.props.api} 
+						token={this.props.token} 
+						setCurrentRfp = {this.setCurrentRfp}/> 
 				<div>
 					<Category 
 						api={this.props.api} 
@@ -61,7 +72,12 @@ var Rfp = React.createClass({
 						token={this.props.token} 
 						questions = {this.state.questions}
 						currentCategory = {this.state.category}
-						onNewQuestion = {this.handleNewQuestion}/>
+						onNewQuestion = {this.handleNewQuestion}
+						setCurrentQuestion = {this.setCurrentQuestion}/>
+					<Participant
+						currentQuestion = {this.state.question}/>
+					<Edit
+						currentQuestion = {this.state.question}/>
 				</div>
 			</div>
 		);
