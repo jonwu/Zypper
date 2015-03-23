@@ -1,8 +1,24 @@
+body.dragging, body.dragging * {
+  cursor: move !important; }
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000; }
+
+ul.sortable li.placeholder {
+  position: relative;
+  /** More li styles **/ }
+
+ul.sortable li.placeholder:before {
+  position: absolute;
+  /** Define arrowhead **/ }
+
 .navbar {
   margin: 0; }
 
 #category {
-  position: fixed;
+  position: absolute;
   height: 100%;
   background-color: #2C3E50; }
 
@@ -26,7 +42,7 @@
   text-decoration: none; }
 
 #question {
-  position: fixed;
+  position: absolute;
   height: 100%;
   background-color: white;
   border-right: 1px solid #D2D7D3;
@@ -40,13 +56,25 @@
   border-radius: 0;
   border-right: 0;
   border-left: 0;
+  padding: 5px 5px;
   font-size: 11.5px;
   background-color: white;
   border-color: #D2D7D3; }
+#question .list-group .list-group-item span.drag {
+  width: 5%;
+  font-size: 1.5em;
+  color: #2C3E50;
+  position: absolute;
+  top: 15px;
+  display: none; }
+#question .list-group .list-group-item span.drag:hover {
+  cursor: move; }
 #question .list-group .list-group-item textarea {
-  width: 100%;
-  height: 100%;
+  margin-left: 7%;
+  width: 93%;
+  font-size: 12px;
   border: 0px;
+  padding: 0px 5px;
   resize: none; }
 #question .list-group .list-group-item a {
   color: #2C3E50; }
@@ -56,3 +84,5 @@
   text-decoration: none;
   color: #2C3E50;
   background-color: #ECF2F8; }
+#question .list-group .list-group-item:hover span.drag {
+  display: block; }

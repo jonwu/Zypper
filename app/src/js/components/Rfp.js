@@ -7,6 +7,7 @@ var Rfp = React.createClass({
 	getInitialState: function() {
 		return {
 			rfp: null,
+			category: null,
 			categories: [],
 			questions: []
 		};
@@ -31,13 +32,19 @@ var Rfp = React.createClass({
 			$.get(this.props.api + '/categories/'+ category.id +'/questions', {'token': this.props.token}, function(data) {
 				console.log("questions", data)
 				this.setState({
+					category: category,
 					questions: data
 				});
 			}.bind(this));
 		}
 	},
 	
-	
+	handleNewQuestion: function(questions){
+		this.setState({
+			questions: questions
+		});
+	},
+
 	render: function() {
 		return (
 			<div>
@@ -49,7 +56,12 @@ var Rfp = React.createClass({
 						categories={this.state.categories} 
 						setCurrentCategory = {this.setCurrentCategory}/>
 
-					<Question api={this.props.api} token={this.props.token} questions = {this.state.questions}/>
+					<Question 
+						api={this.props.api} 
+						token={this.props.token} 
+						questions = {this.state.questions}
+						currentCategory = {this.state.category}
+						onNewQuestion = {this.handleNewQuestion}/>
 				</div>
 			</div>
 		);

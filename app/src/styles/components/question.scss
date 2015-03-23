@@ -1,15 +1,17 @@
 @import 'colors';
 
 #question{
-	position: fixed;
+	position: absolute;
 	height: 100%;
 	background-color: white;
 	border-right: 1px solid $light_border;
 	padding: 0;
 	overflow: auto;
+
 }
 
 #question{
+
 	.list-group{
 		margin: 0;
     	border-radius: 0;
@@ -18,15 +20,30 @@
 	    border-radius: 0;
 	    border-right: 0;
 	    border-left: 0;
-	    
+	    padding: 5px 5px;
 	    font-size: 11.5px;
 	    background-color: white;
 	    border-color: $light_border;
 	}
+	.list-group .list-group-item span.drag{
+		width: 5%;
+		font-size: 1.5em;
+		color: $primary;
+		position: absolute;
+		top: 15px;
+		display: none;
+
+	}
+	.list-group .list-group-item span.drag:hover{
+		cursor: move;
+	}
+	
 	.list-group .list-group-item textarea{
-		width: 100%;
-		height: 100%;
+		margin-left: 7%;
+		width: 93%;
+		font-size: 12px;
 		border: 0px;
+		padding: 0px 5px;
 		resize: none;
 	}
 	.list-group .list-group-item a{
@@ -42,6 +59,10 @@
 	    text-decoration: none;
 	    color: $primary;
 	    background-color: $minor;
+	}
+	.list-group .list-group-item:hover span.drag{
+		display: block;	
+
 	}
 	
 }
