@@ -106,20 +106,6 @@ var React = require('react');
 var Textarea = require('react-textarea-autosize');
 var Question = React.createClass({displayName: "Question",
 
-	uuid: function () {
-    var i, random;
-    var uuid = '';
-    for (i = 0; i < 32; i++) {
-        random = Math.random() * 16 | 0;
-        if (i === 8 || i === 12 || i === 16 || i === 20) {
-            uuid += '-';
-        }
-
-        uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
-    }
-    return uuid;
-	},
-
 	handleOnKeyUp: function(i){
 
 		var self = this;
@@ -136,7 +122,7 @@ var Question = React.createClass({displayName: "Question",
 			var newQuestions = this.props.questions;
 			newQuestions[i].text = question
 			this.props.onNewQuestion(newQuestions)
-			
+
 			clearTimeout(this.typingTimer);
 			if(question) {
     			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
@@ -176,10 +162,14 @@ var Question = React.createClass({displayName: "Question",
 	},
 
 	render: function() {
+
 		var questions = this.props.questions.map(function(question, i){
 			return (
 				React.createElement("li", {className: "list-group-item", key: question.id}, 
-					React.createElement("span", {className: "drag glyphicon glyphicon-th", "aria-hidden": "true"}), 
+					React.createElement("div", {className: "side"}, 
+						React.createElement("span", {className: "q-index"}, i+1), 
+						React.createElement("span", {className: "drag glyphicon glyphicon-th", "aria-hidden": "true"})
+					), 
 					React.createElement(Textarea, {
 						onFocus: this.handleFocus.bind(this, i), 
 						onBlur: this.handleBlur.bind(this,i), 
@@ -207,7 +197,13 @@ var Question = React.createClass({displayName: "Question",
 		    		end = item.index() + 1
 		    		console.log(start)
 		    		console.log(end)
-
+		    		
+		    		// Reset index in O(n) time. FYI Could be optimized.  
+		    		$(".q-index").each(function(index) {
+			            nextIndex = index + 1; 
+			            $(this).html(nextIndex)
+			        })
+			        
 		    		$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions/reorder", {"start": start, "end": end, "token": this.props.token});
 
 		    		item.removeClass("dragged").removeAttr("style")

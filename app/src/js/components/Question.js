@@ -18,7 +18,7 @@ var Question = React.createClass({
 			var newQuestions = this.props.questions;
 			newQuestions[i].text = question
 			this.props.onNewQuestion(newQuestions)
-			
+
 			clearTimeout(this.typingTimer);
 			if(question) {
     			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
@@ -58,10 +58,14 @@ var Question = React.createClass({
 	},
 
 	render: function() {
+
 		var questions = this.props.questions.map(function(question, i){
 			return (
 				<li className = "list-group-item" key={question.id}>
-					<span className = "drag glyphicon glyphicon-th" aria-hidden="true"></span>
+					<div className ="side">
+						<span className = "q-index">{i+1}</span>
+						<span className = "drag glyphicon glyphicon-th" aria-hidden="true"></span>
+					</div>
 					<Textarea 
 						onFocus={this.handleFocus.bind(this, i)} 
 						onBlur={this.handleBlur.bind(this,i)}
@@ -89,7 +93,13 @@ var Question = React.createClass({
 		    		end = item.index() + 1
 		    		console.log(start)
 		    		console.log(end)
-
+		    		
+		    		// Reset index in O(n) time. FYI Could be optimized.  
+		    		$(".q-index").each(function(index) {
+			            nextIndex = index + 1; 
+			            $(this).html(nextIndex)
+			        })
+			        
 		    		$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions/reorder", {"start": start, "end": end, "token": this.props.token});
 
 		    		item.removeClass("dragged").removeAttr("style")
