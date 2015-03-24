@@ -17,7 +17,7 @@ var View = React.createClass({
 
 	getInitialState: function() {
 		return {
-			token: "M3QMubtP2QzKwYF92YjwkWjPQc7Crvzu4g",
+			token: "KiDvbwEDN5sX3gxG2p_H9RN4oBori1BVTQ",
 			api: "http://localhost:3000/api"
 		};
 	},

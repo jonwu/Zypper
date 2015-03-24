@@ -42,8 +42,10 @@ var Edit = React.createClass({displayName: "Edit",
 		var questionTitle = this.props.currentQuestion ? this.props.currentQuestion.text : '';
 		return (
 			React.createElement("div", {className: "col-md-6 col-md-offset-4 col-xs-offset-2 col-xs-8 ", id: "edit"}, 
-
+				
 				React.createElement("h3", null, questionTitle)
+				
+				
 			)
 		);
 	}
@@ -118,30 +120,69 @@ var Question = React.createClass({displayName: "Question",
     return uuid;
 	},
 	
-	handleKeyUp: function(e){
-		e = e || event;
-		if (e.keyCode === 13) {
+	handleOnKeyUp: function(i){
+
+		var self = this;
+		var question = event.target.value
+		var doneTypingInterval = 2000;  //time in ms, 5 second for example
+
+		// When user clicks enter, create new question
+		if (event.keyCode === 13) {
 			$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions", {"text": "", "token": this.props.token}, function(data, textStatus, xhr) {
 				var newQuestions = this.props.questions.concat(data)
 				this.props.onNewQuestion(newQuestions)
 			}.bind(this));
+		}else{
+			clearTimeout(this.typingTimer);
+			if(question) {
+    			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
+    		}
+		    
 		}
-		
+		function handleTimer(){
+			self.handleQuestionChange(question, i)
+		}
+	},
+
+	handleQuestionChange: function(question, i){
+		$.ajax({
+				url: this.props.api + "/questions/" + this.props.questions[i].id,
+				type: 'PUT',
+				dataType: 'json',
+				data: {"text": question, "token": this.props.token},
+			})
+			.done(function(data) {
+				console.log(data)
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+	},
+	handleBlur: function(i){
+		var question = event.target.value
+		this.handleQuestionChange(question, i)
 	},
 	handleFocus: function(i){
 		var question = this.props.questions[i]
 		this.props.setCurrentQuestion(question)
-
 	},
 
 	render: function() {
-		console.log(this.props.questions)
-
+	
 		var questions = this.props.questions.map(function(question, i){
 			return (
-				React.createElement("li", {className: "list-group-item", key: this.uuid()}, 
+				React.createElement("li", {className: "list-group-item", key: i}, 
 					React.createElement("span", {className: "drag glyphicon glyphicon-th", "aria-hidden": "true"}), 
-					React.createElement(Textarea, {onFocus: this.handleFocus.bind(this, i), onKeyUp: this.handleKeyUp}, question.text)
+					React.createElement(Textarea, {
+						onFocus: this.handleFocus.bind(this, i), 
+						onBlue: this.handleBlur.bind(this,i), 
+						onKeyUp: this.handleOnKeyUp.bind(this, i), 
+						defaultValue: question.text}
+					)
 				)
 			);
 		}.bind(this));
@@ -151,24 +192,25 @@ var Question = React.createClass({displayName: "Question",
 			var end = 0
 			$(".sortable").sortable({
 				group: 'no-drop',
-  			handle: 'span.glyphicon',
-  			onDragStart: function (item, container, _super) {
-  				start = item.index() + 1
-	        // Duplicate items of the no drop area
-	        if(!container.options.drop)
-	          item.clone().insertAfter(item)
-	        _super(item)
-	    	},
-	    	onDrop: function(item, container, _super) {
-	    		end = item.index() + 1
-	    		console.log(start)
-	    		console.log(end)
+	  			handle: 'span.glyphicon',
+	  			onDragStart: function (item, container, _super) {
+	  				start = item.index() + 1
+		        // Duplicate items of the no drop area
+		        if(!container.options.drop)
+		          item.clone().insertAfter(item)
+		        _super(item)
+		    	},
+		    	onDrop: function(item, container, _super) {
+		    		end = item.index() + 1
+		    		console.log(start)
+		    		console.log(end)
 
-	    		$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions/reorder", {"start": start, "end": end, "token": this.props.token});
+		    		$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions/reorder", {"start": start, "end": end, "token": this.props.token});
 
-	    		item.removeClass("dragged").removeAttr("style")
-					$("body").removeClass("dragging")
-	    	}.bind(this)
+		    		item.removeClass("dragged").removeAttr("style")
+						$("body").removeClass("dragging")
+		    	}.bind(this)
+
 			});
     		
 		}.bind(this)()
@@ -390,7 +432,7 @@ var View = React.createClass({displayName: "View",
 
 	getInitialState: function() {
 		return {
-			token: "M3QMubtP2QzKwYF92YjwkWjPQc7Crvzu4g",
+			token: "KiDvbwEDN5sX3gxG2p_H9RN4oBori1BVTQ",
 			api: "http://localhost:3000/api"
 		};
 	},
