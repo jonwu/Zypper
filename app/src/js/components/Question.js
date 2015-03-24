@@ -15,7 +15,7 @@ var Question = React.createClass({
     }
     return uuid;
 	},
-	
+
 	handleOnKeyUp: function(i){
 
 		var self = this;
@@ -33,7 +33,6 @@ var Question = React.createClass({
 			if(question) {
     			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
     		}
-		    
 		}
 		function handleTimer(){
 			self.handleQuestionChange(question, i)
@@ -59,6 +58,7 @@ var Question = React.createClass({
 			});
 	},
 	handleBlur: function(i){
+		clearTimeout(this.typingTimer);
 		var question = event.target.value
 		this.handleQuestionChange(question, i)
 	},
@@ -75,7 +75,7 @@ var Question = React.createClass({
 					<span className = "drag glyphicon glyphicon-th" aria-hidden="true"></span>
 					<Textarea 
 						onFocus={this.handleFocus.bind(this, i)} 
-						onBlue={this.handleBlur.bind(this,i)}
+						onBlur={this.handleBlur.bind(this,i)}
 						onKeyUp={this.handleOnKeyUp.bind(this, i)}
 						defaultValue={question.text}>
 					</Textarea>

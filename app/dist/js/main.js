@@ -119,7 +119,7 @@ var Question = React.createClass({displayName: "Question",
     }
     return uuid;
 	},
-	
+
 	handleOnKeyUp: function(i){
 
 		var self = this;
@@ -137,7 +137,6 @@ var Question = React.createClass({displayName: "Question",
 			if(question) {
     			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
     		}
-		    
 		}
 		function handleTimer(){
 			self.handleQuestionChange(question, i)
@@ -163,6 +162,7 @@ var Question = React.createClass({displayName: "Question",
 			});
 	},
 	handleBlur: function(i){
+		clearTimeout(this.typingTimer);
 		var question = event.target.value
 		this.handleQuestionChange(question, i)
 	},
@@ -179,7 +179,7 @@ var Question = React.createClass({displayName: "Question",
 					React.createElement("span", {className: "drag glyphicon glyphicon-th", "aria-hidden": "true"}), 
 					React.createElement(Textarea, {
 						onFocus: this.handleFocus.bind(this, i), 
-						onBlue: this.handleBlur.bind(this,i), 
+						onBlur: this.handleBlur.bind(this,i), 
 						onKeyUp: this.handleOnKeyUp.bind(this, i), 
 						defaultValue: question.text}
 					)
