@@ -29,6 +29,10 @@ var Question = React.createClass({
 				this.props.onNewQuestion(newQuestions)
 			}.bind(this));
 		}else{
+			var newQuestions = this.props.questions;
+			newQuestions[i].text = question
+			this.props.onNewQuestion(newQuestions)
+			
 			clearTimeout(this.typingTimer);
 			if(question) {
     			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
@@ -68,7 +72,6 @@ var Question = React.createClass({
 	},
 
 	render: function() {
-	
 		var questions = this.props.questions.map(function(question, i){
 			return (
 				<li className = "list-group-item" key={question.id}>
