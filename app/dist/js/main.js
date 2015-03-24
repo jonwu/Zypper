@@ -175,7 +175,7 @@ var Question = React.createClass({displayName: "Question",
 	
 		var questions = this.props.questions.map(function(question, i){
 			return (
-				React.createElement("li", {className: "list-group-item", key: i}, 
+				React.createElement("li", {className: "list-group-item", key: question.id}, 
 					React.createElement("span", {className: "drag glyphicon glyphicon-th", "aria-hidden": "true"}), 
 					React.createElement(Textarea, {
 						onFocus: this.handleFocus.bind(this, i), 
