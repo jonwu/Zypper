@@ -19,7 +19,7 @@ ul.sortable li.placeholder:before {
 
 #category {
   position: absolute;
-  height: 100%;
+  height: calc(100% - 50px);
   background-color: #2C3E50; }
 
 #category ul {
@@ -43,7 +43,7 @@ ul.sortable li.placeholder:before {
 
 #question {
   position: absolute;
-  height: 100%;
+  height: calc(100% - 50px);
   background-color: white;
   border-right: 1px solid #D2D7D3;
   padding: 0;
@@ -86,3 +86,13 @@ ul.sortable li.placeholder:before {
   background-color: #ECF2F8; }
 #question .list-group .list-group-item:hover span.drag {
   display: block; }
+
+#participant {
+  position: absolute;
+  height: calc(100% - 50px);
+  background-color: #ECF2F8;
+  border-left: 1px solid #F3F2F5; }
+
+#edit {
+  position: absolute;
+  height: calc(100% - 50px); }

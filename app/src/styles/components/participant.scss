@@ -1,0 +1,8 @@
+@import 'colors';
+
+#participant{
+	position: absolute;
+	height: calc(100% - 50px);
+	background-color: $minor;
+	border-left: 1px solid $major;
+}

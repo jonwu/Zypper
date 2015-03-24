@@ -2,8 +2,9 @@
 
 #category{
 	position: absolute;
-	height: 100%;
+	height: calc(100% - 50px);
 	background-color: $dark;
+	
 }
 
 #category{
