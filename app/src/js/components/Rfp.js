@@ -65,6 +65,7 @@ var Rfp = React.createClass({
 						api={this.props.api} 
 						token={this.props.token} 
 						categories={this.state.categories} 
+						currentCategory= {this.state.category}
 						setCurrentCategory = {this.setCurrentCategory}/>
 
 					<Question 
@@ -72,6 +73,7 @@ var Rfp = React.createClass({
 						token={this.props.token} 
 						questions = {this.state.questions}
 						currentCategory = {this.state.category}
+						currentQuestion = {this.state.question}
 						onNewQuestion = {this.handleNewQuestion}
 						setCurrentQuestion = {this.setCurrentQuestion}/>
 					<Participant

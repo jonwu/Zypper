@@ -15,7 +15,8 @@ ul.sortable li.placeholder:before {
   /** Define arrowhead **/ }
 
 .navbar {
-  margin: 0; }
+  margin: 0;
+  z-index: 2; }
 
 #category {
   position: absolute;
@@ -40,6 +41,9 @@ ul.sortable li.placeholder:before {
 #category ul li:hover a, #category ul li:hover h1 {
   color: white;
   text-decoration: none; }
+#category ul li.active a, #category ul li.active h1 {
+  color: white;
+  text-decoration: none; }
 
 #question {
   position: absolute;
@@ -52,11 +56,14 @@ ul.sortable li.placeholder:before {
 #question .list-group {
   margin: 0;
   border-radius: 0; }
+#question li.q-active textarea {
+  background-color: #ECF2F8; }
 #question .list-group-item {
   border-radius: 0;
   border-right: 0;
   border-left: 0;
   padding: 0px 0px;
+  margin-bottom: -5px;
   font-size: 11.5px;
   background-color: white;
   border-color: #D2D7D3; }

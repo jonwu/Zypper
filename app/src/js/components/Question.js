@@ -8,17 +8,15 @@ var Question = React.createClass({
 		var question = event.target.value
 		var doneTypingInterval = 2000;  //time in ms, 5 second for example
 
-		// When user clicks enter, create new question
 		if (event.keyCode === 13) {
+			// When user clicks enter, create new question
 			$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions", {"text": "", "token": this.props.token}, function(data, textStatus, xhr) {
 				var newQuestions = this.props.questions.concat(data)
 				this.props.onNewQuestion(newQuestions)
 			}.bind(this));
 		}else{
-			var newQuestions = this.props.questions;
-			newQuestions[i].text = question
-			this.props.onNewQuestion(newQuestions)
-
+			//Save text when user finish typing
+			handleNewQuestion()
 			clearTimeout(this.typingTimer);
 			if(question) {
     			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
@@ -26,6 +24,11 @@ var Question = React.createClass({
 		}
 		function handleTimer(){
 			self.handleQuestionChange(question, i)
+		}
+		function handleNewQuestion(){
+			var newQuestions = self.props.questions;
+			newQuestions[i].text = question
+			self.props.onNewQuestion(newQuestions)
 		}
 	},
 
@@ -38,16 +41,14 @@ var Question = React.createClass({
 			})
 			.done(function(data) {
 				console.log(data)
-				console.log("success");
 			})
 			.fail(function() {
-				console.log("error");
+				console.log("fail")
 			})
-			.always(function() {
-				console.log("complete");
-			});
+			
 	},
 	handleBlur: function(i){
+		// Save text when user clicks out
 		clearTimeout(this.typingTimer);
 		var question = event.target.value
 		this.handleQuestionChange(question, i)
@@ -60,8 +61,9 @@ var Question = React.createClass({
 	render: function() {
 
 		var questions = this.props.questions.map(function(question, i){
+			var isActive = this.props.currentQuestion == question ? "list-group-item q-active" : "list-group-item";
 			return (
-				<li className = "list-group-item" key={question.id}>
+				<li className = {isActive} key={question.id}>
 					<div className ="side">
 						<span className = "q-index">{i+1}</span>
 						<span className = "drag glyphicon glyphicon-th" aria-hidden="true"></span>

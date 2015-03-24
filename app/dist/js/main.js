@@ -5,13 +5,15 @@ var Category = React.createClass({displayName: "Category",
 	setCategory: function(i){
 		var category = this.props.categories[i]
 		this.props.setCurrentCategory(category)
+		
 	},
 
 	render: function() {
 
 		var categories = this.props.categories.map(function(category, i){
+			var isActive = this.props.currentCategory == category ? "active" : "";
 			return (
-				React.createElement("li", {key: category.id, onClick: this.setCategory.bind(this, i)}, 
+				React.createElement("li", {key: category.id, className: isActive, onClick: this.setCategory.bind(this, i)}, 
 					React.createElement("h1", null, category.text[0]), 
 					React.createElement("a", null, category.text)
 				)
@@ -112,17 +114,15 @@ var Question = React.createClass({displayName: "Question",
 		var question = event.target.value
 		var doneTypingInterval = 2000;  //time in ms, 5 second for example
 
-		// When user clicks enter, create new question
 		if (event.keyCode === 13) {
+			// When user clicks enter, create new question
 			$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions", {"text": "", "token": this.props.token}, function(data, textStatus, xhr) {
 				var newQuestions = this.props.questions.concat(data)
 				this.props.onNewQuestion(newQuestions)
 			}.bind(this));
 		}else{
-			var newQuestions = this.props.questions;
-			newQuestions[i].text = question
-			this.props.onNewQuestion(newQuestions)
-
+			//Save text when user finish typing
+			handleNewQuestion()
 			clearTimeout(this.typingTimer);
 			if(question) {
     			this.typingTimer = setTimeout(handleTimer, doneTypingInterval);
@@ -130,6 +130,11 @@ var Question = React.createClass({displayName: "Question",
 		}
 		function handleTimer(){
 			self.handleQuestionChange(question, i)
+		}
+		function handleNewQuestion(){
+			var newQuestions = self.props.questions;
+			newQuestions[i].text = question
+			self.props.onNewQuestion(newQuestions)
 		}
 	},
 
@@ -142,16 +147,14 @@ var Question = React.createClass({displayName: "Question",
 			})
 			.done(function(data) {
 				console.log(data)
-				console.log("success");
 			})
 			.fail(function() {
-				console.log("error");
+				console.log("fail")
 			})
-			.always(function() {
-				console.log("complete");
-			});
+			
 	},
 	handleBlur: function(i){
+		// Save text when user clicks out
 		clearTimeout(this.typingTimer);
 		var question = event.target.value
 		this.handleQuestionChange(question, i)
@@ -164,8 +167,9 @@ var Question = React.createClass({displayName: "Question",
 	render: function() {
 
 		var questions = this.props.questions.map(function(question, i){
+			var isActive = this.props.currentQuestion == question ? "list-group-item q-active" : "list-group-item";
 			return (
-				React.createElement("li", {className: "list-group-item", key: question.id}, 
+				React.createElement("li", {className: isActive, key: question.id}, 
 					React.createElement("div", {className: "side"}, 
 						React.createElement("span", {className: "q-index"}, i+1), 
 						React.createElement("span", {className: "drag glyphicon glyphicon-th", "aria-hidden": "true"})
@@ -296,6 +300,7 @@ var Rfp = React.createClass({displayName: "Rfp",
 						api: this.props.api, 
 						token: this.props.token, 
 						categories: this.state.categories, 
+						currentCategory: this.state.category, 
 						setCurrentCategory: this.setCurrentCategory}), 
 
 					React.createElement(Question, {
@@ -303,6 +308,7 @@ var Rfp = React.createClass({displayName: "Rfp",
 						token: this.props.token, 
 						questions: this.state.questions, 
 						currentCategory: this.state.category, 
+						currentQuestion: this.state.question, 
 						onNewQuestion: this.handleNewQuestion, 
 						setCurrentQuestion: this.setCurrentQuestion}), 
 					React.createElement(Participant, {

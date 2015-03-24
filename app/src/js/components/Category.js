@@ -4,13 +4,15 @@ var Category = React.createClass({
 	setCategory: function(i){
 		var category = this.props.categories[i]
 		this.props.setCurrentCategory(category)
+		
 	},
 
 	render: function() {
 
 		var categories = this.props.categories.map(function(category, i){
+			var isActive = this.props.currentCategory == category ? "active" : "";
 			return (
-				<li key={category.id} onClick={this.setCategory.bind(this, i)}>
+				<li key={category.id} className={isActive} onClick={this.setCategory.bind(this, i)}>
 					<h1>{category.text[0]}</h1>
 					<a>{category.text}</a>
 				</li>
