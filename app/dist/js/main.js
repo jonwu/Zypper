@@ -67,6 +67,20 @@ module.exports = Header;
 var React = require('react');
 var Textarea = require('react-textarea-autosize');
 var Question = React.createClass({displayName: "Question",
+
+	uuid: function () {
+    var i, random;
+    var uuid = '';
+    for (i = 0; i < 32; i++) {
+        random = Math.random() * 16 | 0;
+        if (i === 8 || i === 12 || i === 16 || i === 20) {
+            uuid += '-';
+        }
+
+        uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
+    }
+    return uuid;
+	},
 	
 	handleKeyUp: function(e){
 		e = e || event;
@@ -81,9 +95,10 @@ var Question = React.createClass({displayName: "Question",
 
 	render: function() {
 		console.log(this.props.questions)
+
 		var questions = this.props.questions.map(function(question, i){
 			return (
-				React.createElement("li", {className: "list-group-item", key: i}, 
+				React.createElement("li", {className: "list-group-item", key: this.uuid()}, 
 					React.createElement("span", {className: "drag glyphicon glyphicon-th", "aria-hidden": "true"}), 
 					React.createElement(Textarea, {onKeyUp: this.handleKeyUp}, question.text)
 				)
@@ -91,18 +106,31 @@ var Question = React.createClass({displayName: "Question",
 		}.bind(this));
 
 		var initSortable = function(){
+			var start = 0
+			var end = 0
 			$(".sortable").sortable({
 				group: 'no-drop',
-      			handle: 'span.glyphicon',
-      			onDragStart: function (item, container, _super) {
-			        // Duplicate items of the no drop area
-			        if(!container.options.drop)
-			          item.clone().insertAfter(item)
-			        _super(item)
-			    }
+  			handle: 'span.glyphicon',
+  			onDragStart: function (item, container, _super) {
+  				start = item.index() + 1
+	        // Duplicate items of the no drop area
+	        if(!container.options.drop)
+	          item.clone().insertAfter(item)
+	        _super(item)
+	    	},
+	    	onDrop: function(item, container, _super) {
+	    		end = item.index() + 1
+	    		console.log(start)
+	    		console.log(end)
+
+	    		$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions/reorder", {"start": start, "end": end, "token": this.props.token});
+
+	    		item.removeClass("dragged").removeAttr("style")
+					$("body").removeClass("dragging")
+	    	}.bind(this)
 			});
     		
-		}()
+		}.bind(this)()
 
 		return (
 			React.createElement("div", {className: "col-md-3 col-md-offset-1 col-xs-offset-2 col-xs-6 ", id: "question"}, 
@@ -305,7 +333,7 @@ var View = React.createClass({displayName: "View",
 
 	getInitialState: function() {
 		return {
-			token: "a6ysCzEAHE3bKsbDSBvHTy8yJs-XKA6P4g",
+			token: "M3QMubtP2QzKwYF92YjwkWjPQc7Crvzu4g",
 			api: "http://localhost:3000/api"
 		};
 	},
