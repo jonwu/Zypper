@@ -7,12 +7,15 @@ var Question = React.createClass({
 		var self = this;
 		var question = event.target.value
 		var doneTypingInterval = 2000;  //time in ms, 5 second for example
-
+		var end = $('#question .list-group-item').filter('.q-active').index()
+		
 		if (event.keyCode === 13) {
 			// When user clicks enter, create new question
-			$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions", {"text": "", "token": this.props.token}, function(data, textStatus, xhr) {
-				var newQuestions = this.props.questions.concat(data)
+			$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions/insert", {"text": "", "end": end+2, "token": this.props.token}, function(data, textStatus, xhr) {
+				var newQuestions = this.props.questions
+				newQuestions.splice(end+1, 0, data);
 				this.props.onNewQuestion(newQuestions)
+				this.resetCounter();
 			}.bind(this));
 		}else{
 			//Save text when user finish typing
@@ -54,8 +57,16 @@ var Question = React.createClass({
 		this.handleQuestionChange(question, i)
 	},
 	handleFocus: function(i){
+		console.log("focus", i)
 		var question = this.props.questions[i]
 		this.props.setCurrentQuestion(question)
+	},
+	resetCounter: function(){
+		// Reset index in O(n) time. FYI Could be optimized.  
+		$(".q-index").each(function(index) {
+            nextIndex = index + 1; 
+            $(this).html(nextIndex)
+        })
 	},
 
 	render: function() {
@@ -93,15 +104,7 @@ var Question = React.createClass({
 		    	},
 		    	onDrop: function(item, container, _super) {
 		    		end = item.index() + 1
-		    		console.log(start)
-		    		console.log(end)
-		    		
-		    		// Reset index in O(n) time. FYI Could be optimized.  
-		    		$(".q-index").each(function(index) {
-			            nextIndex = index + 1; 
-			            $(this).html(nextIndex)
-			        })
-			        
+		    		this.resetCounter();
 		    		$.post(this.props.api + '/categories/' + this.props.currentCategory.id + "/questions/reorder", {"start": start, "end": end, "token": this.props.token});
 
 		    		item.removeClass("dragged").removeAttr("style")
