@@ -16,8 +16,6 @@ var Rfp = React.createClass({
 		};
 	},
 
-	
-	
 	setCurrentRfp: function(rfp){
 		if(rfp != null){
 			$.get(this.props.api + '/rfis/'+ rfp.id +'/categories', {'token': this.props.token}, function(data) {
@@ -72,12 +70,16 @@ var Rfp = React.createClass({
 						api={this.props.api} 
 						token={this.props.token} 
 						questions = {this.state.questions}
+						currentRfp = {this.state.rfp}
 						currentCategory = {this.state.category}
 						currentQuestion = {this.state.question}
 						onNewQuestion = {this.handleNewQuestion}
 						setCurrentQuestion = {this.setCurrentQuestion}/>
 					<Participant
-						currentQuestion = {this.state.question}/>
+						api={this.props.api} 
+						token={this.props.token} 
+						currentQuestion = {this.state.question}
+						currentRfp = {this.state.rfp}/>
 					<Edit
 						currentQuestion = {this.state.question}/>
 				</div>

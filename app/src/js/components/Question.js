@@ -68,27 +68,7 @@ var Question = React.createClass({
             $(this).html(nextIndex)
         })
 	},
-
-	render: function() {
-
-		var questions = this.props.questions.map(function(question, i){
-			var isActive = this.props.currentQuestion == question ? "list-group-item q-active" : "list-group-item";
-			return (
-				<li className = {isActive} key={question.id}>
-					<div className ="side">
-						<span className = "q-index">{i+1}</span>
-						<span className = "drag glyphicon glyphicon-th" aria-hidden="true"></span>
-					</div>
-					<Textarea 
-						onFocus={this.handleFocus.bind(this, i)} 
-						onBlur={this.handleBlur.bind(this,i)}
-						onKeyUp={this.handleOnKeyUp.bind(this, i)}
-						defaultValue={question.text}>
-					</Textarea>
-				</li>
-			);
-		}.bind(this));
-
+	componentDidMount: function() {
 		var initSortable = function(){
 			var start = 0
 			var end = 0
@@ -115,12 +95,36 @@ var Question = React.createClass({
     		
 		}.bind(this)()
 
+	},
+
+	render: function() {
+
+		var questions = this.props.questions.map(function(question, i){
+			var isActive = this.props.currentQuestion == question ? "list-group-item q-active" : "list-group-item";
+			return (
+				<li className = {isActive} key={question.id}>
+					<div className ="side">
+						<span className = "q-index">{i+1}</span>
+						<span className = "drag glyphicon glyphicon-th" aria-hidden="true"></span>
+					</div>
+					<Textarea 
+						onFocus={this.handleFocus.bind(this, i)} 
+						onBlur={this.handleBlur.bind(this,i)}
+						onKeyUp={this.handleOnKeyUp.bind(this, i)}
+						defaultValue={question.text}>
+					</Textarea>
+				</li>
+			);
+		}.bind(this));
+
+		
+
 		return (
 			<div className="col-md-3 col-md-offset-1 col-xs-offset-2 col-xs-6 " id="question">
 				<ul className="list-group sortable">
 					{questions}
+					
 				</ul>
-				{initSortable}
 			</div>
 		);
 	}

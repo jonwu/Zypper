@@ -118,3 +118,20 @@ ul.sortable li.placeholder:before {
 #edit {
   position: absolute;
   height: calc(100% - 52px); }
+
+.component .header {
+  height: 10%;
+  width: 100%; }
+.component .content .textarea {
+  min-height: 100px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 12px;
+  padding: 5px 7px;
+  resize: none;
+  border-color: lightgray; }
+.component .content {
+  height: 90%;
+  width: 100%;
+  margin: auto;
+  text-align: center; }
